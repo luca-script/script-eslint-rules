@@ -178,3 +178,5 @@ dist
 package-lock.json
 
 .nx/cache
+
+packages/script-eslint/gen
