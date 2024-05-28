@@ -179,4 +179,4 @@ package-lock.json
 
 .nx/cache
 
-packages/script-eslint/gen
+packages/script-eslint-rules/gen
