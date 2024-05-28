@@ -1,15 +1,19 @@
 # script-eslint-rules
 
-To install dependencies:
+A set of rules for script
+
+To build,
 
 ```bash
-bun install
+yarn install
+yarn build
 ```
 
-To run:
+To test,
 
 ```bash
-bun run index.ts
+yarn install
+yarn test
 ```
 
-This project was created using `bun init` in bun v1.1.8. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+This repository uses Nx for cached builds
