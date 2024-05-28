@@ -1,4 +1,4 @@
-import { AST } from "vue-eslint-parser";
+import { AST as VueAST } from "vue-eslint-parser";
 import { createRule } from "../util";
 import type { TSESTree } from "@typescript-eslint/utils";
 
@@ -22,10 +22,10 @@ export default createRule<[], "computed", "no-class-computed-properties">({
 
         return {
             Program: (node) => {
-                const templateBody = (node as AST.ESLintProgram).templateBody;
+                const templateBody = (node as VueAST.ESLintProgram).templateBody;
 
                 if (templateBody)
-                    AST.traverseNodes(templateBody, {
+                    VueAST.traverseNodes(templateBody, {
                         enterNode(node, parent) {
                             if (parent !== null && (parent.type as string) === "VExpressionContainer") {
                                 if (node.type == "ObjectExpression") {
@@ -37,6 +37,7 @@ export default createRule<[], "computed", "no-class-computed-properties">({
                                                         if (parent.parent.key.argument?.type == "VIdentifier") {
                                                             if (parent.parent.key.argument.name == "class") {
                                                                 ctx.report({
+                                                                    // Cast it as a TypeScript-compatible node
                                                                     node: prop as unknown as TSESTree.Node,
                                                                     messageId: "computed",
                                                                 });
