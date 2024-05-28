@@ -1,0 +1,34 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "script-eslint-rules",
+    "type": "library",
+    "implicitDependencies": [],
+    "targets": {
+        "build": {
+            "executor": "@nx/esbuild:esbuild",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/packages/script-eslint-rules",
+                "main": "packages/script-eslint-rules/index.ts",
+                "tsConfig": "packages/script-eslint-rules/tsconfig.json",
+                "thirdParty": false,
+                "declaration": true,
+                "declarationRootDir": "{projectRoot}",
+                "format": ["esm"],
+                "minify": true,
+                "sourcemap": "external"
+            },
+            "dependsOn": ["rebuild-rules"]
+        },
+        "rebuild-rules": {
+            "executor": "nx:run-commands",
+            "options": {
+                "parallel": true,
+                "cwd": "packages/script-eslint-rules",
+                "commands": ["yarn generate-rulemap"]
+            },
+            "cache": true,
+            "inputs": ["{projectRoot}/generator/rulemap.ts", "{projectRoot}/rules/*.ts"]
+        }
+    }
+}
