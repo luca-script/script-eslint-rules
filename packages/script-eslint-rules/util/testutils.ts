@@ -25,6 +25,9 @@ export function createRuleTester(): RuleTester {
             ecmaVersion: 2023,
             tsconfigRootDir: getFixturesRootDir(),
             project: join(getFixturesRootDir(), "./tsconfig.json"),
+            cacheLifetime: {
+                glob: 1000,
+            },
         },
     });
 }

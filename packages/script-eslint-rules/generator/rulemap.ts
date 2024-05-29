@@ -18,6 +18,76 @@ const project = new morph.Project({
     // skipAddingFilesFromTsConfig: true,
 });
 
+function handleMeta(meta: morph.ObjectLiteralElementLike | undefined) {
+    const configs: Record<string, string> = {};
+
+    if (meta !== undefined && meta.isKind(SyntaxKind.PropertyAssignment)) {
+        const metaAssignment = meta.getInitializerIfKind(SyntaxKind.ObjectLiteralExpression);
+        if (metaAssignment !== undefined) {
+            const configurationsAssignment = metaAssignment.getProperty("configurations");
+
+            if (configurationsAssignment !== undefined && configurationsAssignment.isKind(SyntaxKind.PropertyAssignment)) {
+                const configurations = configurationsAssignment.getInitializer();
+
+                if (configurations && configurations.isKind(SyntaxKind.ObjectLiteralExpression)) {
+                    configurations.getProperties().forEach((elem) => {
+                        if (elem.isKind(SyntaxKind.PropertyAssignment)) {
+                            const initializer = elem.getInitializer();
+                            if (initializer && initializer.isKind(SyntaxKind.StringLiteral)) {
+                                configs[elem.getNameNode().getText()] = initializer.getLiteralText();
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    return {
+        configs,
+    };
+}
+
+function handleDeclaration(decl: morph.Node<morph.ts.Node>): {
+    ruleName: string | null;
+    configs: ReturnType<typeof handleMeta>["configs"];
+} {
+    let ruleName = null;
+    let configs: ReturnType<typeof handleMeta>["configs"] = {};
+
+    if (decl.isKind(morph.ts.SyntaxKind.ExportAssignment)) {
+        const expr = decl.getExpression();
+        if (morph.CallExpression.is(morph.SyntaxKind.CallExpression)(expr)) {
+            expr.getTypeArguments().forEach((val, ind) => {
+                // eslint-disable-next-line no-magic-numbers
+                if (ind == 2) {
+                    const type = val.getType();
+                    if (type.isStringLiteral()) {
+                        const literalValue = type.getLiteralValue();
+                        if (typeof literalValue === "string") {
+                            ruleName = literalValue;
+                        }
+                    }
+                }
+            });
+            const args = expr.getArguments();
+            if (args[0]) {
+                const arg = args[0];
+                if (arg.isKind(SyntaxKind.ObjectLiteralExpression)) {
+                    const meta = arg.getProperty("meta");
+                    const metadata = handleMeta(meta);
+                    configs = metadata.configs;
+                }
+            }
+        }
+    }
+
+    return {
+        ruleName,
+        configs,
+    };
+}
+
 for (const filename of readdirSync(ruleDir)) {
     const path = join(ruleDir, filename);
     if (path.endsWith(".test.ts")) continue; // Test files, BORING
@@ -33,61 +103,21 @@ for (const filename of readdirSync(ruleDir)) {
     for (const exportSym of exportSyms) {
         if (exportSym.getName() === "default") {
             for (const decl of exportSym.getDeclarations()) {
-                if (morph.ExportAssignment.is(morph.SyntaxKind.ExportAssignment)(decl)) {
-                    const expr = decl.getExpression();
-                    if (morph.CallExpression.is(morph.SyntaxKind.CallExpression)(expr)) {
-                        expr.getTypeArguments().forEach((val, ind) => {
-                            if (ind == 2) {
-                                const type = val.getType();
-                                if (type.isStringLiteral()) {
-                                    const literalValue = type.getLiteralValue();
-                                    if (typeof literalValue === "string") {
-                                        ruleName = literalValue;
-                                    }
-                                }
-                            }
-                        });
-                        const args = expr.getArguments();
-                        if (args[0]) {
-                            const arg = args[0];
-                            if (arg.isKind(SyntaxKind.ObjectLiteralExpression)) {
-                                const meta = arg.getProperty("meta");
-                                if (meta !== undefined && meta.isKind(SyntaxKind.PropertyAssignment)) {
-                                    const metaAssignment = meta.getInitializerIfKind(SyntaxKind.ObjectLiteralExpression);
-                                    if (metaAssignment !== undefined) {
-                                        const configurationsAssignment = metaAssignment.getProperty("configurations");
-
-                                        if (
-                                            configurationsAssignment !== undefined &&
-                                            configurationsAssignment.isKind(SyntaxKind.PropertyAssignment)
-                                        ) {
-                                            const configurations = configurationsAssignment.getInitializer();
-
-                                            if (configurations && configurations.isKind(SyntaxKind.ObjectLiteralExpression)) {
-                                                configurations.getProperties().forEach((elem) => {
-                                                    if (elem.isKind(SyntaxKind.PropertyAssignment)) {
-                                                        const initializer = elem.getInitializer();
-                                                        if (initializer && initializer.isKind(SyntaxKind.StringLiteral)) {
-                                                            configs[elem.getNameNode().getText()] = initializer.getLiteralText();
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                const result = handleDeclaration(decl);
+                for (const [key, value] of Object.entries(result.configs)) {
+                    configs[key] = value;
                 }
+                result.ruleName !== null ? (ruleName = result.ruleName) : undefined;
             }
         }
     }
 
+    console.log(configs);
+
     const expectedRuleName = filename.replaceAll(/\.ts$/g, "");
-    const actualRuleName = ruleName as string | null; // TypeScript doing a big dumdum
+    const actualRuleName = ruleName;
     if (actualRuleName === null) {
-        console.log(`[!] Rulename is null!`);
+        console.log(`[!] Rulename is null on file: "${filename}"`);
         exit(1);
     }
     if (ruleName !== expectedRuleName) {

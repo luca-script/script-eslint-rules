@@ -30,22 +30,19 @@ export default createRule<[], "computed", "no-class-computed-properties">({
                             if (parent !== null && (parent.type as string) === "VExpressionContainer") {
                                 if (node.type == "ObjectExpression") {
                                     node.properties.forEach((prop) => {
-                                        if (prop.type == "Property") {
-                                            if (prop.computed) {
-                                                if (parent.parent?.type == "VAttribute") {
-                                                    if (parent.parent.key.type == "VDirectiveKey") {
-                                                        if (parent.parent.key.argument?.type == "VIdentifier") {
-                                                            if (parent.parent.key.argument.name == "class") {
-                                                                ctx.report({
-                                                                    // Cast it as a TypeScript-compatible node
-                                                                    node: prop as unknown as TSESTree.Node,
-                                                                    messageId: "computed",
-                                                                });
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                        if (
+                                            prop.type == "Property" &&
+                                            prop.computed &&
+                                            parent.parent?.type == "VAttribute" &&
+                                            parent.parent.key.type == "VDirectiveKey" &&
+                                            parent.parent.key.argument?.type == "VIdentifier" &&
+                                            parent.parent.key.argument.name == "class"
+                                        ) {
+                                            ctx.report({
+                                                // Cast it as a TypeScript-compatible node
+                                                node: prop as unknown as TSESTree.Node,
+                                                messageId: "computed",
+                                            });
                                         }
                                     });
                                 }

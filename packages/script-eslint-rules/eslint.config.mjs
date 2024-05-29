@@ -1,16 +1,18 @@
+/* eslint-disable no-magic-numbers */
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
-import { dirname, resolve, join } from "path";
 
 const config = tseslint.config({
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     extends: [eslint.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
     languageOptions: {
+        parser: tseslint.parser,
         parserOptions: {
             project: true,
             tsconfigRootDir: import.meta.dirname,
         },
     },
-    files: ["packages/**/*"],
+    files: ["./**/*"],
     ignores: ["dist/*", "**/gen/**/*"],
     rules: {
         "max-depth": ["error", 4],
