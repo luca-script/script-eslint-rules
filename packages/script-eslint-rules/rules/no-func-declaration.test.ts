@@ -30,6 +30,17 @@ ruleTester.run(rule.name, rule, {
             ],
             name: "Simple async function",
         },
+        {
+            code: "const hi = async function(param: string): string {CONTENT}",
+            output: "const hi = async (param: string): string => {CONTENT}",
+            errors: [
+                {
+                    messageId: "expectArrowFunction",
+                    line: 1,
+                },
+            ],
+            name: "function() assignment",
+        },
     ],
     valid: [
         {

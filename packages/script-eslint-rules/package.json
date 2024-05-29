@@ -14,7 +14,7 @@
         "@typescript-eslint/rule-tester": "^7.11.0",
         "@typescript-eslint/type-utils": "^7.11.0",
         "@typescript-eslint/utils": "^7.11.0",
-        "eslint": "^9.3.0",
+        "eslint": "^8.57.0",
         "typescript": "^5.4.5",
         "typescript-eslint": "^7.11.0",
         "vue-eslint-parser": "^9.4.2"
@@ -36,5 +36,8 @@
         {
             "name": "Luca Mollema"
         }
-    ]
+    ],
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    }
 }

@@ -88,7 +88,7 @@ function handleDeclaration(decl: morph.Node<morph.ts.Node>): {
     };
 }
 
-for (const filename of readdirSync(ruleDir)) {
+for (const filename of readdirSync(ruleDir).toSorted((a, b) => a.localeCompare(b))) {
     const path = join(ruleDir, filename);
     if (path.endsWith(".test.ts")) continue; // Test files, BORING
 
@@ -111,8 +111,6 @@ for (const filename of readdirSync(ruleDir)) {
             }
         }
     }
-
-    console.log(configs);
 
     const expectedRuleName = filename.replaceAll(/\.ts$/g, "");
     const actualRuleName = ruleName;
