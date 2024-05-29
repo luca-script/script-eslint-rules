@@ -26,7 +26,15 @@
         "generate-rulemap": "bun ./generator/rulemap.ts"
     },
     "module": "./index.js",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "name": "script-eslint-rules",
-    "type": "module"
+    "type": "module",
+    "author": {
+        "name": "Luca Mollema"
+    },
+    "maintainers": [
+        {
+            "name": "Luca Mollema"
+        }
+    ]
 }

@@ -27,13 +27,17 @@ export default createRule<[], Messages, "no-multiple-array-check">({
             LogicalExpression: (node) => {
                 const isDoingArraySomeOrEvery = [node.left, node.right]
                     .map((subNode): string | boolean => {
+                        // For both the left and right side, return false if we are not calling on an array, else the function name
+
                         if (subNode.type === AST_NODE_TYPES.CallExpression) {
-                            const calleeSym = services.getSymbolAtLocation(subNode.callee);
-                            if (calleeSym === undefined) return false;
                             if (subNode.callee.type === AST_NODE_TYPES.MemberExpression) {
+                                // [anything].anyName
                                 const sym = services.getTypeAtLocation(subNode.callee.object);
                                 if (sym === undefined) return false;
                                 if (sym.getSymbol()?.getName() === "Array") {
+                                    const calleeSym = services.getSymbolAtLocation(subNode.callee);
+                                    if (calleeSym === undefined) return false;
+
                                     return calleeSym.getName();
                                 }
                             }

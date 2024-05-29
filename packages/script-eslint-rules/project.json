@@ -29,6 +29,12 @@
             },
             "cache": true,
             "inputs": ["{projectRoot}/generator/rulemap.ts", "{projectRoot}/rules/*.ts"]
+        },
+        "lint": {
+            "executor": "@nx/eslint:lint",
+            "options": {
+                "lintFilePatterns": ["{projectRoot}/**/*"]
+            }
         }
     }
 }

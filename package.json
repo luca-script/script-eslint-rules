@@ -48,5 +48,13 @@
             "packages/**"
         ]
     },
-    "private": true
+    "private": true,
+    "author": {
+        "name": "Luca Mollema"
+    },
+    "maintainers": [
+        {
+            "name": "Luca Mollema"
+        }
+    ]
 }
