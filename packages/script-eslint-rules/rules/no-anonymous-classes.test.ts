@@ -1,5 +1,5 @@
 import rule from "./no-anonymous-classes";
-import { createRuleTester } from "../util/testutils";
+import { createRuleTester } from "../util/test-utils";
 
 const ruleTester = createRuleTester();
 

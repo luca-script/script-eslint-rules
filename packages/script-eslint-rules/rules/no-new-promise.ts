@@ -8,7 +8,6 @@ export default createRule<[], Messages, "no-new-promise">({
     meta: {
         docs: {
             description: "new Promise() can result in unreadable code",
-            recommended: "strict",
         },
         messages: {
             promiseConstructor: "new Promise() is disallowed syntax",

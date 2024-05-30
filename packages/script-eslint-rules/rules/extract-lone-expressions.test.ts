@@ -1,5 +1,5 @@
 import rule from "./extract-lone-expressions";
-import { createRuleTester } from "../util/testutils";
+import { createRuleTester } from "../util/test-utils";
 
 const ruleTester = createRuleTester();
 

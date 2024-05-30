@@ -1,6 +1,7 @@
 {
     "devDependencies": {
         "@eslint/js": "^9.3.0",
+        "@types/eslint": "8.56.10",
         "@types/node": "^20.12.12",
         "nx": "19.1.0",
         "prettier": "^3.2.5",
@@ -14,7 +15,7 @@
         "@typescript-eslint/rule-tester": "^7.11.0",
         "@typescript-eslint/type-utils": "^7.11.0",
         "@typescript-eslint/utils": "^7.11.0",
-        "eslint": "^8.57.0",
+        "eslint": "^9.3.0",
         "typescript": "^5.4.5",
         "typescript-eslint": "^7.11.0",
         "vue-eslint-parser": "^9.4.2"

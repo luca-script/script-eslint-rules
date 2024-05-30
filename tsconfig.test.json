@@ -4,7 +4,8 @@
         "types": ["@types/jest", "@types/node"],
         "module": "ESNext",
         "moduleResolution": "NodeNext",
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "target": "ES2018"
     },
     "include": ["./**/*.test.ts"]
 }
