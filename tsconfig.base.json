@@ -20,6 +20,8 @@
         "noUnusedLocals": false,
         "noUnusedParameters": false,
         "noPropertyAccessFromIndexSignature": false,
+        "emitDeclarationOnly": false,
+        "declaration": true,
 
         "types": ["@types/bun"]
     }

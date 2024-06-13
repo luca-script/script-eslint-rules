@@ -172,7 +172,7 @@ const genConfigs = () => {
                 `'script-eslint-rules/${imp.name.replaceAll("\\", "\\\\").replaceAll("'", "\\'")}': '${level.replaceAll("\\", "\\\\").replaceAll("'", "\\'")}' as const, `;
         }
 
-        text = text + `}, plugins: { 'script-eslint-rules': plg } },\n`;
+        text = text + `}, plugins: { 'script-eslint-rules': plg } as const },\n`;
     }
 
     return text;
@@ -180,12 +180,14 @@ const genConfigs = () => {
 
 const code = `
 // AUTO-GENERATED, DO NOT MODIFY, USE "yarn rebuild-rules"
+import type { FlatConfig } from "@typescript-eslint/utils/ts-eslint";
+
 ${genImports()}
 
 
 const rules = {${getImports()}};
 
-function genConf(plg: any) {
+function genConf(plg: FlatConfig.Plugin) {
 const configs = {${genConfigs()}};
 
 return configs;

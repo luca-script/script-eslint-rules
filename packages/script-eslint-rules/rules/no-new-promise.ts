@@ -16,6 +16,7 @@ export default createRule<[], Messages, "no-new-promise">({
         type: "problem",
         configurations: {
             recommended: "warn",
+            strict: "error",
         },
     },
     name: "no-new-promise",

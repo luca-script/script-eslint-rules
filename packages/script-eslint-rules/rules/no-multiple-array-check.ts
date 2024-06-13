@@ -17,6 +17,7 @@ export default createRule<[], Messages, "no-multiple-array-check">({
         },
         configurations: {
             recommended: "warn",
+            strict: "error",
         },
     },
     defaultOptions: [],

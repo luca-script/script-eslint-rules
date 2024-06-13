@@ -178,6 +178,7 @@ dist
 package-lock.json
 
 .nx/cache
+.nx/workspace-data
 
 packages/script-eslint-rules/gen
 tmp

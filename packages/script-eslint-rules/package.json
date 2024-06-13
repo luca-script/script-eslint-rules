@@ -11,6 +11,7 @@
         "typescript": "^5.0.0"
     },
     "dependencies": {
+        "@swc/helpers": "~0.5.2",
         "@typescript-eslint/parser": "^7.11.0",
         "@typescript-eslint/rule-tester": "^7.11.0",
         "@typescript-eslint/type-utils": "^7.11.0",
@@ -21,7 +22,11 @@
         "vue-eslint-parser": "^9.4.2"
     },
     "files": [
-        "./index.ts"
+        "./index.{js.map,js,d.ts}",
+        "./util",
+        "./rules",
+        "./gen",
+        "./plugin.{js.map,js,d.ts}"
     ],
     "scripts": {
         "generate-rulemap": "bun ./generator/rulemap.ts"

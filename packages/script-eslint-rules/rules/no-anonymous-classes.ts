@@ -11,6 +11,7 @@ export default createRule<[], Messages, "no-anonymous-classes">({
         type: "problem",
         configurations: {
             recommended: "error",
+            strict: "error",
         },
     },
     defaultOptions: [],

@@ -14,6 +14,7 @@ export default createRule<[], "expressionStatement", "extract-lone-expressions">
         },
         configurations: {
             recommended: "warn",
+            strict: "error",
         },
     },
     defaultOptions: [],

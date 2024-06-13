@@ -15,6 +15,7 @@ export default createRule<[], "computed", "no-class-computed-properties">({
         type: "problem",
         configurations: {
             recommended: "error",
+            strict: "error",
         },
     },
     create: (ctx) => {

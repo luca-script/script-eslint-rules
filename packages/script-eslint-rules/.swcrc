@@ -1,0 +1,45 @@
+{
+    "$schema": "https://swc.rs/schema.json",
+
+    "jsc": {
+        "target": "es2022",
+        "parser": {
+            "syntax": "typescript",
+            "decorators": true,
+            "dynamicImport": true,
+            "dts": true
+        },
+        "transform": {
+            "decoratorMetadata": true,
+            "legacyDecorator": true,
+            "useDefineForClassFields": true
+        },
+        "experimental": {
+            "plugins": []
+        },
+        "keepClassNames": true,
+        "externalHelpers": true,
+        "loose": true,
+        "minify": {
+            "compress": {
+                "unused": true
+            },
+            "mangle": true
+        }
+    },
+    "module": {
+        "type": "commonjs",
+        "strict": true
+    },
+    "sourceMaps": true,
+    "exclude": [
+        "jest.config.ts",
+        ".*\\.spec.tsx?$",
+        ".*\\.test.tsx?$",
+        "./src/jest-setup.ts$",
+        "./**/jest-setup.ts$",
+        ".*.js$",
+        "util/test-utils.ts",
+        "generator"
+    ]
+}

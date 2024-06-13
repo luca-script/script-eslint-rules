@@ -1,24 +1,26 @@
 {
-    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "name": "script-eslint-rules",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "type": "library",
     "implicitDependencies": [],
     "targets": {
         "build": {
-            "executor": "@nx/esbuild:esbuild",
+            "executor": "@nx/js:swc",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/packages/script-eslint-rules",
                 "main": "packages/script-eslint-rules/index.ts",
                 "tsConfig": "packages/script-eslint-rules/tsconfig.json",
-                "thirdParty": false,
-                "declaration": true,
+                "declaration": false,
                 "declarationRootDir": "{projectRoot}",
                 "format": ["esm"],
                 "minify": true,
-                "sourcemap": "external"
+                "sourcemap": "external",
+                "bundle": true,
+                "generatePackageJson": false
             },
-            "dependsOn": ["rebuild-rules"]
+            "dependsOn": ["rebuild-rules"],
+            "inputs": ["{projectRoot}/rules/*.ts", "{projectRoot}/util/*.ts", "{projectRoot}/plugin.ts", "{projectRoot}/index.ts"]
         },
         "rebuild-rules": {
             "executor": "nx:run-commands",

@@ -28,6 +28,7 @@ export default createRule<[{ allowParentImports: boolean }], Messages, "no-relat
         },
         configurations: {
             recommended: "warn",
+            strict: "error",
         },
     },
     create: (ctx) => {

@@ -175,6 +175,7 @@ export default createRule<[], "expectArrowFunction", "no-func-declaration">({
         },
         configurations: {
             recommended: "warn",
+            strict: "error",
         },
     },
     name: "no-func-declaration",

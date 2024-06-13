@@ -52,8 +52,9 @@
         {
             "plugin": "@nx/esbuild",
             "options": {
-                "thirdParty": false
-            }
+                "generatePackageJson": false
+            },
+            "exclude": ["**/package.json"]
         },
         {
             "plugin": "@nx/jest/plugin",
