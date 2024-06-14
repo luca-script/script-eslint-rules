@@ -3,7 +3,7 @@
         "@eslint/js": "^9.3.0",
         "@types/eslint": "8.56.10",
         "@types/node": "^20.12.12",
-        "nx": "19.1.0",
+        "nx": "19.2.3",
         "prettier": "^3.2.5",
         "ts-morph": "^22.0.0"
     },
@@ -11,15 +11,15 @@
         "typescript": "^5.0.0"
     },
     "dependencies": {
-        "@swc/helpers": "~0.5.2",
-        "@typescript-eslint/parser": "^7.11.0",
-        "@typescript-eslint/rule-tester": "^7.11.0",
-        "@typescript-eslint/type-utils": "^7.11.0",
-        "@typescript-eslint/utils": "^7.11.0",
-        "eslint": "^9.3.0",
+        "@swc/helpers": "~0.5.11",
+        "@typescript-eslint/parser": "^7.13.0",
+        "@typescript-eslint/rule-tester": "patch:@typescript-eslint/rule-tester@npm%3A7.13.0#~/.yarn/patches/@typescript-eslint-rule-tester-npm-7.13.0-e9065cbeaf.patch",
+        "@typescript-eslint/type-utils": "^7.13.0",
+        "@typescript-eslint/utils": "^7.13.0",
+        "eslint": "^9.4.0",
         "typescript": "^5.4.5",
-        "typescript-eslint": "^7.11.0",
-        "vue-eslint-parser": "^9.4.2"
+        "typescript-eslint": "^7.13.0",
+        "vue-eslint-parser": "^9.4.3"
     },
     "files": [
         "./index.{js.map,js,d.ts}",
@@ -32,7 +32,7 @@
         "generate-rulemap": "bun ./generator/rulemap.ts"
     },
     "module": "./index.js",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "name": "script-eslint-rules",
     "type": "module",
     "author": {

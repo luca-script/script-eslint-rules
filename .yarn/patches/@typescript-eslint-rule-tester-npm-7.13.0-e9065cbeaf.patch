@@ -1,0 +1,13 @@
+diff --git a/dist/RuleTester.js b/dist/RuleTester.js
+index c4ebe2ddb86a2cde708cbb26fa95626dc8a0f42a..d9949f6e5ac593c9caabd51cad64a289cd19ac70 100644
+--- a/dist/RuleTester.js
++++ b/dist/RuleTester.js
+@@ -113,7 +113,7 @@ class RuleTester extends TestFramework_1.TestFramework {
+         _RuleTester_instances.add(this);
+         _RuleTester_testerConfig.set(this, void 0);
+         _RuleTester_rules.set(this, {});
+-        _RuleTester_linter.set(this, new ts_eslint_1.Linter());
++        _RuleTester_linter.set(this, new ts_eslint_1.Linter({ configType: "eslintrc" }));
+         /**
+          * The configuration to use for this tester. Combination of the tester
+          * configuration and the default configuration.

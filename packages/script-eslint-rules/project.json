@@ -16,7 +16,6 @@
                 "format": ["esm"],
                 "minify": true,
                 "sourcemap": "external",
-                "bundle": true,
                 "generatePackageJson": false
             },
             "dependsOn": ["rebuild-rules"],
