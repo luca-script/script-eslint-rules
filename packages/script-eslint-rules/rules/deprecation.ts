@@ -1,8 +1,9 @@
-import type { ParserServicesWithTypeInformation, TSESTree } from "@typescript-eslint/utils";
+import { ParserServicesWithTypeInformation, TSESTree } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleContext } from "@typescript-eslint/utils/ts-eslint";
 import type { EntityName, JSDocComment, JSDocMemberName, NodeArray, Symbol as TSSymbol, TypeChecker } from "typescript";
-import {
+import ts, { getJSDocTags, isInterfaceDeclaration, isJSDocAllType, isJsxAttribute, isTypeAliasDeclaration } from "typescript";
+const {
     getAllJSDocTags,
     isIdentifier,
     isJSDocDeprecatedTag,
@@ -11,7 +12,7 @@ import {
     isQualifiedName,
     isShorthandPropertyAssignment,
     TypeFormatFlags,
-} from "typescript";
+} = ts;
 
 import { getParserServices } from "@typescript-eslint/utils/eslint-utils";
 
@@ -101,11 +102,15 @@ function formatComments(comment: string | NodeArray<JSDocComment>): string {
 function handleMaybeDeprecatedSymbol(
     ctx: Readonly<RuleContext<MessageIds, Options>>,
     services: ParserServicesWithTypeInformation,
-    checker: TypeChecker,
+    checker: Readonly<TypeChecker>,
     node: TSESTree.Node,
     sym: TSSymbol,
     name: string,
 ): void {
+    if (sym.flags & ts.SymbolFlags.Alias) {
+        sym = checker.getAliasedSymbol(sym);
+    }
+
     if (
         node.type === AST_NODE_TYPES.Identifier &&
         (node.parent.type === AST_NODE_TYPES.CallExpression || node.parent.type === AST_NODE_TYPES.NewExpression) &&
@@ -176,6 +181,17 @@ function handleMaybeDeprecatedSymbol(
     }
 }
 
+function prettyJSXTagName(name: TSESTree.JSXTagNameExpression): string {
+    switch (name.type) {
+        case TSESTree.AST_NODE_TYPES.JSXIdentifier:
+            return name.name;
+        case TSESTree.AST_NODE_TYPES.JSXMemberExpression:
+            return name.property.name;
+        case TSESTree.AST_NODE_TYPES.JSXNamespacedName:
+            return `${name.namespace.name}:${name.name}`;
+    }
+}
+
 export default createRule<Options, MessageIds, "deprecation">({
     name: "deprecation",
     meta: {
@@ -203,6 +219,59 @@ export default createRule<Options, MessageIds, "deprecation">({
 
         return {
             // TODO: Support a[b] syntax
+            JSXElement(node): void {
+                const elemSym = checker.getSymbolAtLocation(services.esTreeNodeToTSNodeMap.get(node.openingElement.name));
+                if (elemSym === undefined) {
+                    return;
+                }
+                const contextual = checker.getContextualType(
+                    services.esTreeNodeToTSNodeMap.get(
+                        node.openingElement.name.type === AST_NODE_TYPES.JSXIdentifier
+                            ? node.openingElement.name
+                            : node.openingElement.name.type === AST_NODE_TYPES.JSXNamespacedName
+                              ? node.openingElement.name.name
+                              : node.openingElement.name.property,
+                    ),
+                );
+                if (contextual === undefined) {
+                    return;
+                }
+
+                node.openingElement.attributes.forEach((attr) => {
+                    switch (attr.type) {
+                        case TSESTree.AST_NODE_TYPES.JSXAttribute:
+                            const sym = checker.getPropertyOfType(
+                                contextual,
+                                attr.name.type === AST_NODE_TYPES.JSXIdentifier ? attr.name.name : attr.name.name.name,
+                            );
+                            if (sym === undefined) {
+                                // Types unavailable
+                                break;
+                            }
+
+                            handleMaybeDeprecatedSymbol(
+                                ctx,
+                                services,
+                                checker,
+                                attr.name,
+                                sym,
+                                typeof attr.name.name === "string" ? attr.name.name : attr.name.name.name,
+                            );
+                            break;
+                        case TSESTree.AST_NODE_TYPES.JSXSpreadAttribute:
+                            break;
+                    }
+                });
+
+                handleMaybeDeprecatedSymbol(
+                    ctx,
+                    services,
+                    checker,
+                    node.openingElement.name,
+                    elemSym,
+                    prettyJSXTagName(node.openingElement.name),
+                );
+            },
             Property(node): void {
                 const par = services.esTreeNodeToTSNodeMap.get(node);
 

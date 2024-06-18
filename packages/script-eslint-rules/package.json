@@ -12,11 +12,11 @@
     },
     "dependencies": {
         "@swc/helpers": "~0.5.11",
-        "@typescript-eslint/parser": "^7.13.0",
-        "@typescript-eslint/rule-tester": "patch:@typescript-eslint/rule-tester@npm%3A7.13.0#~/.yarn/patches/@typescript-eslint-rule-tester-npm-7.13.0-e9065cbeaf.patch",
-        "@typescript-eslint/type-utils": "^7.13.0",
-        "@typescript-eslint/utils": "^7.13.0",
-        "eslint": "^9.4.0",
+        "@typescript-eslint/parser": "^7.13.1",
+        "@typescript-eslint/rule-tester": "patch:@typescript-eslint/rule-tester@npm%3A7.13.1#~/.yarn/patches/@typescript-eslint-rule-tester-npm-7.13.0-e9065cbeaf.patch",
+        "@typescript-eslint/type-utils": "^7.13.1",
+        "@typescript-eslint/utils": "^7.13.1",
+        "eslint": "^9.5.0",
         "typescript": "^5.4.5",
         "typescript-eslint": "^7.13.0",
         "vue-eslint-parser": "^9.4.3"
@@ -32,7 +32,7 @@
         "generate-rulemap": "bun ./generator/rulemap.ts"
     },
     "module": "./index.js",
-    "version": "0.0.2",
+    "version": "0.0.9",
     "name": "script-eslint-rules",
     "type": "module",
     "author": {

@@ -19,6 +19,7 @@
             "!{projectRoot}/src/test-setup.[jt]s",
             "!{projectRoot}/test-setup.[jt]s"
         ],
+        "tests": ["production", "{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?"],
         "sharedGlobals": []
     },
     "targetDefaults": {

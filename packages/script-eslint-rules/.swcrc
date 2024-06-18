@@ -6,30 +6,33 @@
         "parser": {
             "syntax": "typescript",
             "decorators": true,
-            "dynamicImport": true,
             "dts": true
         },
         "transform": {
             "decoratorMetadata": true,
-            "legacyDecorator": true,
             "useDefineForClassFields": true
         },
         "experimental": {
             "plugins": []
         },
+        "baseUrl": ".",
         "keepClassNames": true,
-        "externalHelpers": true,
-        "loose": true,
+        "externalHelpers": false,
+        "loose": false,
         "minify": {
             "compress": {
-                "unused": true
+                "unused": true,
+                "dead_code": true,
+                "if_return": true
             },
             "mangle": true
         }
     },
     "module": {
-        "type": "commonjs",
-        "strict": true
+        "type": "es6",
+        "strict": true,
+        "importInterop": "swc",
+        "resolveFully": true
     },
     "sourceMaps": true,
     "exclude": [

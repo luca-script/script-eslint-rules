@@ -3,7 +3,6 @@ import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 
 const config = tseslint.config({
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     extends: [eslint.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
     languageOptions: {
         parser: tseslint.parser,

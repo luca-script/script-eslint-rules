@@ -1,5 +1,3 @@
-import { RuleTester } from "@typescript-eslint/rule-tester";
-
 import rule from "./deprecation";
 import { createRuleTester } from "../util/test-utils";
 
@@ -17,34 +15,34 @@ if (false as boolean) {
 }
 
 const a = b;
-    `.trim(),
+        `.trim(),
         `
 const a = 'a';
-    `.trim(),
+        `.trim(),
         `
 /**
  * @deprecated
  */
 const a = 'a';
-    `.trim(),
+        `.trim(),
         `
 /**
  * @deprecated
  */
 class A {}
-    `.trim(),
+        `.trim(),
         `
 /**
  * @deprecated
  */
 interface A {}
-    `.trim(),
+        `.trim(),
         `
 /**
  * @deprecated
  */
 declare class A {}
-    `.trim(),
+        `.trim(),
         `
 class A {
   /**
@@ -52,7 +50,7 @@ class A {
    */
   b: string;
 }
-    `.trim(),
+        `.trim(),
         `
 declare class A {
   /**
@@ -60,7 +58,7 @@ declare class A {
    */
   b: string;
 }
-    `.trim(),
+        `.trim(),
         `
 interface A {
   /**
@@ -68,7 +66,7 @@ interface A {
    */
   b: string;
 }
-    `.trim(),
+        `.trim(),
         `
 class A {
   /**
@@ -80,19 +78,19 @@ class A {
 class B extends A {
   b: string;
 }
-    `.trim(),
+        `.trim(),
         `
 /** @deprecated */
 declare function a(val: string): string;
 declare function a(val: number): number;
-    `.trim(),
+        `.trim(),
         `
 /** @deprecated */
 declare function a(val: string): string;
 declare function a(val: number): number;
 
 a(2);
-    `.trim(),
+        `.trim(),
         `
 /** @deprecated */
 declare function a<K extends string>(val: K): K;
@@ -100,7 +98,20 @@ declare function a(val: number): number;
 declare function a(val: boolean): boolean;
 
 a(2);
-    `.trim(),
+        `.trim(),
+        `
+namespace JSX {
+    export interface IntrinsicElements {
+        /** @deprecated */
+        Example: {}
+    }
+    export type ElementType = any;
+}
+
+declare const Example: (a: any) => any; 
+
+console.log(<Example></Example>)
+        `.trim(),
     ],
     invalid: [
         {
@@ -302,6 +313,71 @@ new A('VALUE');
             errors: [
                 {
                     messageId: "deprecatedSignature",
+                },
+            ],
+        },
+        {
+            code: `
+namespace JSX {
+    export interface IntrinsicElements {
+        /** @deprecated */
+        example: {
+            value?: string;
+        }
+    }
+    export type ElementType = any;
+}
+
+console.log(<example></example>)
+            `,
+            errors: [
+                {
+                    messageId: "deprecated",
+                    data: {
+                        name: "example",
+                    },
+                },
+            ],
+        },
+        {
+            code: `
+namespace JSX {
+    export interface IntrinsicElements {
+        example: {
+            /** @deprecated */
+            value?: string;
+        }
+    }
+    export type ElementType = any;
+}
+
+console.log(<example value="Hello"></example>)
+            `,
+            errors: [
+                {
+                    messageId: "deprecated",
+                    data: {
+                        name: "value",
+                    },
+                },
+            ],
+        },
+        {
+            code: `
+namespace JSX {
+    export interface IntrinsicElements {
+    }
+    export type ElementType = any;
+}
+
+/** @deprecated */
+declare const Test: (a: any) => string;
+
+console.log(<Test></Test>)
+            `,
+            errors: [
+                {
+                    messageId: "deprecated",
                 },
             ],
         },
